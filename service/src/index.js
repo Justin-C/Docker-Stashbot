@@ -27,8 +27,8 @@ app.get('/', (request, response) => {
     response.json({ info: 'Node.js, Express, and Postgres API' })
 })
 
-// const userRoutes = require('./routes/users');
-// app.user('/api', userRoutes);
+var stashbotRouter = require('./routes/stashbot');
+app.use('/stashbot', stashbotRouter);
 
 app.listen(port, () => {
     console.log(`App running on port ${port}.`)

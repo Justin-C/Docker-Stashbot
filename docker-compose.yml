@@ -2,7 +2,7 @@ version: "3"
 services:
   postgres:
     container_name: stashbot-db
-    image: postgres:12.1
+    image: postgres:12.1-alpine
     ports:
       - "5432:5432"
     environment:
@@ -10,7 +10,7 @@ services:
       - POSTGRES_DB=root
       - POSTGRES_PASSWORD=pass
     volumes:
-      - ./postgresql/data:/var/lib/postgresql/data
+      - ./postgresql/data:/var/lib/postgresql/data # maps host to data directory inside cont
       - ./docker_postgres_init.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
   service:
     container_name: stashbot_server
@@ -22,6 +22,8 @@ services:
       - ./service/config:/app/config
       - ./service/src:/app/src
       - ./service/test:/app/test
+    # environment:
+    #   DATABASE_URL: postgres://username:root@stashbot-db:5432/api
     ports:
       - "8080:3000" # port mapping: host:destination
   ui:
@@ -40,8 +42,8 @@ services:
     container_name: stashbot_db_ui
     image: dpage/pgadmin4
     environment:
-      PGADMIN_DEFAULT_EMAIL: "pgadmin@megacorp.com"
-      PGADMIN_DEFAULT_PASSWORD: "s3kr1t_p455w0rd"
+      PGADMIN_DEFAULT_EMAIL: "postgres@test.com"
+      PGADMIN_DEFAULT_PASSWORD: "postgres"
     ports:
       - "16543:80"
     depends_on:
