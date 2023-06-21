@@ -1,7 +1,7 @@
 version: "3"
 services:
   postgres:
-    container_name: prac_db
+    container_name: stashbot-db
     image: postgres:12.1
     ports:
       - "5432:5432"
@@ -13,7 +13,7 @@ services:
       - ./postgresql/data:/var/lib/postgresql/data
       - ./docker_postgres_init.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
   service:
-    container_name: prac_server
+    container_name: stashbot_server
     build:
       context: ./service
       dockerfile: Dockerfile.dev  # on move to prod, update this
@@ -23,9 +23,9 @@ services:
       - ./service/src:/app/src
       - ./service/test:/app/test
     ports:
-      - "3000:3000"
+      - "8080:3000" # port mapping: host:destination
   ui:
-    container_name: prac_ui
+    container_name: stashbot_ui
     build:
       context: ./ui
       dockerfile: Dockerfile.dev  # on move to prod, update this
@@ -35,9 +35,9 @@ services:
       - ./ui/public:/app/public
       - ./ui/.env:/app/.env:ro
     ports:
-      - "8080:8080"
+      - "3000:3000"
   pgadmin-compose:
-    container_name: prac_db_ui
+    container_name: stashbot_db_ui
     image: dpage/pgadmin4
     environment:
       PGADMIN_DEFAULT_EMAIL: "pgadmin@megacorp.com"
