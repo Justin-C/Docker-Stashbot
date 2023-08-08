@@ -29,3 +29,8 @@ login to pgadmin and connect to db
 `
 - paste in ip
 - user: root, pw: pass
+
+
+
+Deactivate:
+- docker-compose down
