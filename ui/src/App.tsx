@@ -1,25 +1,28 @@
 import React from 'react';
-import logo from './logo.svg';
+import { MantineProvider } from '@mantine/core';
+import { useState } from 'react';
+import { Button, TextInput, rem } from '@mantine/core';
+
+
 import './App.css';
+const marks = [
+  { value: 20, label: '20%' },
+  { value: 50, label: '50%' },
+  { value: 80, label: '80%' },
+];
+
 
 function App() {
+  const [value, setValue] = useState('');
+  
   return (
+    <MantineProvider>
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <h1>Docker Stashbot</h1>
+      <Button>Submit</Button>
+      <TextInput value={value} onChange={(event) => setValue(event.currentTarget.value)} />
+            </div>
+    </MantineProvider>
   );
 }
 
