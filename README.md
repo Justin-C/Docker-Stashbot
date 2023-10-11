@@ -34,3 +34,12 @@ login to pgadmin and connect to db
 
 Deactivate:
 - docker-compose down
+
+Ports, components run on the following localhost ports
+- stashbot_server: 8080:3000
+- stashbot_ui: 3000:3000
+- stashbot_db_ui: 16543:80
+- stashbot-db: 5432:5432
+
+Rebuild docker images and run thru dockerfile commands:
+docker-compose up -d --build

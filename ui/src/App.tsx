@@ -2,9 +2,8 @@ import React from 'react';
 import { MantineProvider } from '@mantine/core';
 import { useState } from 'react';
 import { Button, TextInput, rem } from '@mantine/core';
-
-
 import './App.css';
+
 const marks = [
   { value: 20, label: '20%' },
   { value: 50, label: '50%' },
