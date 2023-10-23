@@ -11,7 +11,7 @@ CREATE TABLE bins (
 
 -- foreign key location in bins table must exist to insert into it
 CREATE TABLE items (
-   item_name VARCHAR(50) NOT NULL PRIMARY KEY,
+   item_name VARCHAR(50) NOT NULL PRIMARY KEY, -- natural key (like item name) and a UUID (Universally Unique Identifier) as a primary key
    location INT NOT NULL,
    quantity INT DEFAULT 1 NOT NULL,
    datecreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -19,15 +19,20 @@ CREATE TABLE items (
    FOREIGN KEY(location) REFERENCES bins(id)
 );
 
-CREATE TABLE tags (
+CREATE TABLE tags ( -- not currently used
    id SERIAL PRIMARY KEY,
    item_name VARCHAR(50) NOT NULL,
    item_tag VARCHAR(50) NOT NULL,
    FOREIGN KEY(item_name) REFERENCES items(item_name) ON DELETE CASCADE
 );
 
-CREATE TABLE last_query (
+CREATE TABLE last_query ( -- not currently used
    item_name VARCHAR(50) NOT NULL PRIMARY KEY,
    datequeried TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+   FOREIGN KEY(item_name) REFERENCES items(item_name) ON DELETE CASCADE
+);
+
+CREATE TABLE on_hold (
+   item_name VARCHAR(50) PRIMARY KEY,
    FOREIGN KEY(item_name) REFERENCES items(item_name) ON DELETE CASCADE
 );

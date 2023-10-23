@@ -1,27 +1,30 @@
-import React from 'react';
-import { MantineProvider } from '@mantine/core';
 import { useState } from 'react';
-import { Button, TextInput, rem } from '@mantine/core';
-import './App.css';
-
-const marks = [
-  { value: 20, label: '20%' },
-  { value: 50, label: '50%' },
-  { value: 80, label: '80%' },
-];
-
+import { AppShell, Burger, Button, Tabs } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { Main } from './components/main';
 
 function App() {
-  const [value, setValue] = useState('');
-  
+  const [activeTab, setActiveTab] = useState<string | null>('first');
+  const [opened, { toggle }] = useDisclosure();
+
+
   return (
-    <MantineProvider>
-    <div className="App">
-      <h1>Docker Stashbot</h1>
-      <Button>Submit</Button>
-      <TextInput value={value} onChange={(event) => setValue(event.currentTarget.value)} />
-            </div>
-    </MantineProvider>
+    <AppShell
+      header={{ height: 60 }}
+      navbar={{ width: 300, breakpoint: 'sm', collapsed: { mobile: !opened } }}
+      padding="md"
+    >
+      <AppShell.Header>
+        <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+        <div>Docker Stackbot</div>
+      </AppShell.Header>
+
+      <AppShell.Navbar p="md">Navbar</AppShell.Navbar>
+
+      <AppShell.Main>
+        <Main />
+      </AppShell.Main>
+    </AppShell>
   );
 }
 
