@@ -1,5 +1,4 @@
 const { request, response } = require("express");
-const queries = require("../queries");
 const addBin = require("./helpers/add-bin");
 const addToItems = require("./helpers/add-to-items");
 const validateItemName = require("./helpers/validators/validate-item-name");
