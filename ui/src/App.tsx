@@ -14,13 +14,6 @@ function App() {
       navbar={{ width: 300, breakpoint: 'sm', collapsed: { mobile: !opened } }}
       padding="md"
     >
-      <AppShell.Header>
-        <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-        <div>Docker Stackbot</div>
-      </AppShell.Header>
-
-      <AppShell.Navbar p="md">Navbar</AppShell.Navbar>
-
       <AppShell.Main>
         <Main />
       </AppShell.Main>
