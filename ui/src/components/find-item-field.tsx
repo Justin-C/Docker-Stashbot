@@ -2,58 +2,75 @@ import { Autocomplete, Button, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
+import { fetchFindItems } from "./helpers/api/api";
 
 export const FindItemField = () => {
+  const form = useForm();
+  const [autocompleteValue, setAutocompleteValue] = useState("");
+  const [autocompleteOptions, setAutocompleteOptions] = useState([""]);
+  const [foundItems, setFoundItems] = useState([
+    { itemName: "", itemLocation: "" },
+  ]);
+  const [selectedItem, setSelectedItem] = useState({
+    itemName: "",
+    itemLocation: "",
+  });
+  const debouncedFetch = useDebouncedCallback(fetchAutocompleteData, 500);
 
-    const form = useForm();
-    const [autocompleteValue, setAutocompleteValue] = useState('');
-    const [autocompleteOptions, setAutocompleteOptions] = useState(['']);
-    const debouncedFetch = useDebouncedCallback(fetchAutocompleteData, 500);
-  
-    useEffect(() => {
-      debouncedFetch(autocompleteValue);
-    }, [autocompleteValue, debouncedFetch]);
-  
-    const handleSubmit = (values: any) => {
-      // Handle form submission
-      console.log(values);
-    };
-  
-    function fetchAutocompleteData(query: any) {
-      // Implement your fetch logic here
-      // For example, you can use the fetch API or an axios request
-      // Update the options in the state based on the fetched data
-      // For simplicity, using a mock function here
-  
-      const mockFetch = async () => {
-        // const response = await fetch(`https://api.example.com/autocomplete?query=${query}`);
-        // const data = await response.json();
-        setAutocompleteOptions(['asdf', 'aa']);
-      };
-  
-      mockFetch();
-    }
-  
-    return (
-      <form onSubmit={form.onSubmit(handleSubmit)}>
-  
-        <Autocomplete
-          label="Find an Item"
-          placeholder="Find an Item"
-          data={autocompleteOptions}
-          value={autocompleteValue}
-          onChange={(value) => setAutocompleteValue(value)}
-        //   textFieldProps={{ ...form.getInputProps('country') }}
-        //   clearable
-          required
-        />
-  
-        <Button type="submit" color="blue" >
-          Hold
-        </Button>
-        <Button type="submit" color="blue" >
-          Delete
-        </Button>
-      </form>
+  useEffect(() => {
+    debouncedFetch(autocompleteValue);
+  }, [autocompleteValue, debouncedFetch]);
+
+  useEffect(() => {
+    const search = foundItems.find(
+      (item) => item?.itemName === autocompleteValue,
     );
-}
+    if (search) {
+      setSelectedItem(search);
+    }
+  }, [foundItems, autocompleteValue]);
+
+  // const handleSubmit = (values: any) => {
+  //   // Handle form submission
+  //   console.log(values);
+  // };
+
+  function fetchAutocompleteData(query: any) {
+    const fetchItems = async () => {
+      const response = await fetchFindItems(query);
+      if (response && response.foundItems) {
+        const itemNames = response.foundItems.map((item: any) => item.itemName);
+        setFoundItems(response.foundItems);
+        setAutocompleteOptions(itemNames);
+      }
+    };
+
+    fetchItems();
+  }
+
+  return (
+    <div>
+      <Autocomplete
+        label="Find an Item"
+        placeholder="Find an Item"
+        data={autocompleteOptions}
+        value={autocompleteValue}
+        onChange={(value) => setAutocompleteValue(value)}
+        required
+      />
+      <label htmlFor="">
+        {selectedItem.itemName} in bin {selectedItem.itemLocation}
+      </label>
+      <br></br>
+      <Button type="submit" color="blue">
+        Hold
+      </Button>
+      <Button type="submit" color="blue">
+        Delete
+      </Button>
+      <Button type="submit" color="blue">
+        Move to
+      </Button>
+    </div>
+  );
+};

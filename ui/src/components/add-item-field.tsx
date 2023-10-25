@@ -1,3 +1,1 @@
-export const addItemField = () => {
-
-}
+export const addItemField = () => {};

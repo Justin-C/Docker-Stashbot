@@ -1,3 +1,1 @@
-export const removeItemField = () => {
-
-}
+export const removeItemField = () => {};

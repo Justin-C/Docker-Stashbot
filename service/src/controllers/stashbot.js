@@ -6,6 +6,7 @@ const validateLocation = require("./helpers/validators/validate-location");
 const removeFromItems = require("./helpers/remove-from-items");
 
 const STASHBOT_RESPONSE = require("./helpers/STASHBOT_RESPONSE");
+const findItems = require("./helpers/find-items");
 
 exports.addBin = async (request, response) => {
   const { didError, speechResponse } = await addBin.addBin();
@@ -65,6 +66,28 @@ exports.removeItem = async (request, response) => {
 
   try {
     const resp = await removeFromItems.removeFromItems(itemName);
+    response.status(200).send(resp);
+  } catch (err) {
+    response.status(400).send(err.message);
+  }
+};
+
+
+exports.findItems = async (request, response) => {
+  // TODO: sanitize input
+  // input validation
+  const itemName = validateItemName.validateItemName(
+    request?.body?.itemName ?? ""
+  );
+  if (!itemName) {
+    response
+      .status(400)
+      .send(STASHBOT_RESPONSE.STASHBOT_RESPONSE.REQUEST_ERROR());
+    return;
+  }
+
+  try {
+    const resp = await findItems.findItems(itemName);
     response.status(200).send(resp);
   } catch (err) {
     response.status(400).send(err.message);
