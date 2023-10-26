@@ -10,10 +10,7 @@ export const FindItemField = () => {
   const [loading, setLoading] = useState(false);
   const [value, setValue] = useState('');
   
-  const [selectedItem, setSelectedItem] = useState({
-    itemName: "",
-    itemLocation: "",
-  });
+  const [selectedItem, setSelectedItem] = useState<Item>();
   const debouncedFetch = useDebouncedCallback(fetchAutocompleteData, 500);
 
 
@@ -59,7 +56,11 @@ export const FindItemField = () => {
   useEffect(() => {
     // we need to wait for options to render before we can select first one
     combobox.selectFirstOption();
-  }, [value, comboOptions]);
+    const searchIndex = foundItems.findIndex(item => item.itemName === value)
+    if(searchIndex > -1){
+      setSelectedItem(foundItems[searchIndex])
+    }
+  }, [value, comboOptions, foundItems]);
 
   return (
     <div>
@@ -73,8 +74,8 @@ export const FindItemField = () => {
     >
       <Combobox.Target>
         <TextInput
-          label="Pick value or type anything"
-          placeholder="Pick value or type anything"
+          label="Find an Item"
+          placeholder="Search"
           value={value}
           onChange={(event) => {
             setValue(event.currentTarget.value);
@@ -94,7 +95,7 @@ export const FindItemField = () => {
       </Combobox.Dropdown>
     </Combobox>
       <label htmlFor="">
-        {selectedItem.itemName} in bin {selectedItem.itemLocation}
+      {selectedItem ? `${selectedItem.itemName} is in Bin: ${selectedItem.itemLocation}` : value.length === 0 ? 'Nothing found' : `${value} not found`}
       </label>
       <br></br>
       <Button type="submit" color="blue">
