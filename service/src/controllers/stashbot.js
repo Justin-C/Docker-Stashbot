@@ -1,12 +1,12 @@
-const { request, response } = require("express");
-const addBin = require("./helpers/add-bin");
-const addToItems = require("./helpers/add-to-items");
-const validateItemName = require("./helpers/validators/validate-item-name");
-const validateLocation = require("./helpers/validators/validate-location");
-const removeFromItems = require("./helpers/remove-from-items");
+const { request, response } = require('express');
+const addBin = require('./helpers/add-bin');
+const addToItems = require('./helpers/add-to-items');
+const validateItemName = require('./helpers/validators/validate-item-name');
+const validateLocation = require('./helpers/validators/validate-location');
+const removeFromItems = require('./helpers/remove-from-items');
 
-const STASHBOT_RESPONSE = require("./helpers/STASHBOT_RESPONSE");
-const findItems = require("./helpers/find-items");
+const STASHBOT_RESPONSE = require('./helpers/STASHBOT_RESPONSE');
+const findItems = require('./helpers/find-items');
 
 exports.addBin = async (request, response) => {
   const { didError, speechResponse } = await addBin.addBin();
@@ -19,13 +19,13 @@ exports.addBin = async (request, response) => {
 };
 
 exports.addItem = async (request, response) => {
-  console.log("/addItem request", request?.body);
+  console.log('/addItem request', request?.body);
   // input validation
   const itemName = validateItemName.validateItemName(
-    request?.body?.itemName ?? ""
+    request?.body?.itemName ?? '',
   );
   const location = validateLocation.validateLocation(
-    request?.body?.location ?? ""
+    request?.body?.location ?? '',
   );
   // TODO: validation for quantity, itemTagsArray
   // NOTE: quantity is currently not parsed or expected
@@ -55,7 +55,7 @@ exports.removeItem = async (request, response) => {
 
   // input validation
   const itemName = validateItemName.validateItemName(
-    request?.body?.itemName ?? ""
+    request?.body?.itemName ?? '',
   );
   if (!itemName) {
     response
@@ -72,12 +72,11 @@ exports.removeItem = async (request, response) => {
   }
 };
 
-
 exports.findItems = async (request, response) => {
   // TODO: sanitize input
   // input validation
   const itemName = validateItemName.validateItemName(
-    request?.body?.itemName ?? ""
+    request?.body?.itemName ?? '',
   );
   if (!itemName) {
     response
