@@ -1,11 +1,10 @@
 import { Autocomplete, Button, TextInput } from "@mantine/core";
-import { useForm } from "@mantine/form";
 import { useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { fetchFindItems } from "./helpers/api/api";
 
 export const FindItemField = () => {
-  const form = useForm();
+  // const form = useForm();
   const [autocompleteValue, setAutocompleteValue] = useState("");
   const [autocompleteOptions, setAutocompleteOptions] = useState([""]);
   const [foundItems, setFoundItems] = useState([
@@ -18,7 +17,9 @@ export const FindItemField = () => {
   const debouncedFetch = useDebouncedCallback(fetchAutocompleteData, 500);
 
   useEffect(() => {
-    debouncedFetch(autocompleteValue);
+    if(autocompleteValue.length > 1){
+      debouncedFetch(autocompleteValue);
+    }
   }, [autocompleteValue, debouncedFetch]);
 
   useEffect(() => {
@@ -53,7 +54,7 @@ export const FindItemField = () => {
       <Autocomplete
         label="Find an Item"
         placeholder="Find an Item"
-        data={autocompleteOptions}
+        // data={autocompleteOptions}
         value={autocompleteValue}
         onChange={(value) => setAutocompleteValue(value)}
         required
@@ -73,4 +74,4 @@ export const FindItemField = () => {
       </Button>
     </div>
   );
-};
+}
