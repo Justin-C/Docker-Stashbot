@@ -15,28 +15,25 @@ async function findItems(itemName) {
   client.connect();
   try {
     queryResp = await client.query(
-      `SELECT * FROM items WHERE item_name LIKE '%${itemName}%'`,
+      'SELECT * FROM items WHERE item_name LIKE $1',
+      [`%${itemName}%`],
     );
   } catch (error) {
-    console.log('jrc find item error', error);
     client.end();
-    return new Error({
-      speechResponse: [STASHBOT_RESPONSE.STASHBOT_RESPONSE.FIND_ERROR()],
-    });
+    throw new Error(STASHBOT_RESPONSE.STASHBOT_RESPONSE.FIND_ERROR());
   }
   client.end();
   const foundRows = queryResp?.rows ?? [];
   let responseArray = [];
   if (foundRows.length > 0) {
     for (const entry of foundRows) {
-      console.log('jrc entry', entry);
       responseArray.push({
         itemName: entry.item_name,
         itemLocation: entry.location,
       });
     }
   } else {
-    return new Error(STASHBOT_RESPONSE.STASHBOT_RESPONSE.FIND_NONE(itemName));
+    throw new Error(STASHBOT_RESPONSE.STASHBOT_RESPONSE.FIND_NONE(itemName));
   }
   return { foundItems: responseArray };
 }

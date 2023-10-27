@@ -12,6 +12,7 @@ async function removeFromItems(itemName) {
   try {
     const queryText = 'DELETE FROM items WHERE item_name = $1 RETURNING *';
     const queryValues = [itemName];
+    // using parametrized query values protects against sql injection attacks
     queryResp = await client.query(queryText, queryValues);
   } catch (error) {
     client.end();

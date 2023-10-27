@@ -43,3 +43,6 @@ Ports, components run on the following localhost ports
 
 Rebuild docker images and run thru dockerfile commands:
 docker-compose up -d --build
+docker-compose build ui
+docker-compose build service
+
