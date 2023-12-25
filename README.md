@@ -46,3 +46,6 @@ docker-compose up -d --build
 docker-compose build ui
 docker-compose build service
 
+fix build issue:
+docker container prune
+
