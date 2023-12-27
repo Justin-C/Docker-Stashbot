@@ -81,7 +81,7 @@ exports.findItems = async (request, response) => {
   if (!itemName) {
     response
       .status(400)
-      .send(STASHBOT_RESPONSE.STASHBOT_RESPONSE.REQUEST_ERROR());
+      .send({error: STASHBOT_RESPONSE.STASHBOT_RESPONSE.REQUEST_ERROR()});
     return;
   }
 
@@ -89,6 +89,6 @@ exports.findItems = async (request, response) => {
     const resp = await findItems.findItems(itemName);
     response.status(200).send(resp);
   } catch (err) {
-    response.status(400).send(err.message);
+    response.status(400).send({error: err.message});
   }
 };
