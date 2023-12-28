@@ -8,13 +8,25 @@ const removeFromItems = require('./helpers/remove-from-items');
 const STASHBOT_RESPONSE = require('./helpers/STASHBOT_RESPONSE');
 const findItems = require('./helpers/find-items');
 
+const errorResponse = (error) => {
+  if (typeof(error) === 'string'){
+    return {error: error}
+  }
+  return {error: error.message}
+}
+const successResponse = (response ) => {
+  if(typeof(response) === 'string'){
+  return {response: response}
+  }
+  return response
+}
 exports.addBin = async (request, response) => {
   const { didError, speechResponse } = await addBin.addBin();
 
   if (didError) {
-    response.status(400).send(speechResponse);
+    response.status(400).send(successResponse(speechResponse));
   } else {
-    response.status(200).send(speechResponse);
+    response.status(200).send(errorResponse(speechResponse));
   }
 };
 
@@ -41,10 +53,10 @@ exports.addItem = async (request, response) => {
       itemName,
       location,
     });
-    response.status(200).send(resp);
+    response.status(200).send(successResponse(resp));
   } catch (err) {
     console.log(err);
-    response.status(400).send(err.message);
+    response.status(400).send(errorResponse(err.message));
   }
 };
 
@@ -66,9 +78,9 @@ exports.removeItem = async (request, response) => {
 
   try {
     const resp = await removeFromItems.removeFromItems(itemName);
-    response.status(200).send(resp);
+    response.status(200).send(successResponse(resp));
   } catch (err) {
-    response.status(400).send(err.message);
+    response.status(400).send(errorResponse(err.message));
   }
 };
 
@@ -81,14 +93,14 @@ exports.findItems = async (request, response) => {
   if (!itemName) {
     response
       .status(400)
-      .send({error: STASHBOT_RESPONSE.STASHBOT_RESPONSE.REQUEST_ERROR()});
+      .send(errorResponse(STASHBOT_RESPONSE.STASHBOT_RESPONSE.REQUEST_ERROR()));
     return;
   }
 
   try {
     const resp = await findItems.findItems(itemName);
-    response.status(200).send(resp);
+    response.status(200).send(successResponse(resp));
   } catch (err) {
-    response.status(400).send({error: err.message});
+    response.status(400).send(errorResponse(err.message));
   }
 };
