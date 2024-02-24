@@ -1,5 +1,6 @@
 import { Tabs } from '@mantine/core';
 import { useState } from 'react';
+import { AddItemField } from './add-item-field';
 import { FindItemField } from './find-item-field';
 
 export const Main = () => {
@@ -18,7 +19,9 @@ export const Main = () => {
         <Tabs.Tab value='third'>View Bin</Tabs.Tab>
       </Tabs.List>
 
-      <Tabs.Panel value='first'>First panel</Tabs.Panel>
+      <Tabs.Panel value='first'>
+        <AddItemField />
+      </Tabs.Panel>
       <Tabs.Panel value='second'>
         <FindItemField />
       </Tabs.Panel>
