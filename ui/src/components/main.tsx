@@ -2,6 +2,7 @@ import { Tabs } from '@mantine/core';
 import { useState } from 'react';
 import { AddItemField } from './add-item-field';
 import { FindItemField } from './find-item-field';
+import { AddItemField } from './add-item-field';
 
 export const Main = () => {
   const [activeTab, setActiveTab] = useState<string | null>('first');
