@@ -4,6 +4,7 @@ const addToItems = require('./helpers/add-to-items');
 const validateItemName = require('./helpers/validators/validate-item-name');
 const validateLocation = require('./helpers/validators/validate-location');
 const removeFromItems = require('./helpers/remove-from-items');
+const holdItem = require('./helpers/hold-item');
 
 const STASHBOT_RESPONSE = require('./helpers/STASHBOT_RESPONSE');
 const findItems = require('./helpers/find-items');
@@ -92,3 +93,43 @@ exports.findItems = async (request, response) => {
     response.status(400).send(err.message);
   }
 };
+
+exports.holdItem = async (request, response) => {
+  // TODO
+  const itemName = validateItemName.validateItemName(
+    request?.body?.itemName ?? '',
+  );
+  if (!itemName) {
+    response
+      .status(400)
+      .send(STASHBOT_RESPONSE.STASHBOT_RESPONSE.REQUEST_ERROR());
+    return;
+  }
+
+  try {
+    const resp = await holdItem.holdItem(itemName);
+    response.status(200).send(resp);
+  } catch (err) {
+    response.status(400).send(err.message);
+  }
+}
+
+exports.moveItem = async (request, response) => {
+  // TODO
+  const itemName = validateItemName.validateItemName(
+    request?.body?.itemName ?? '',
+  );
+  if (!itemName) {
+    response
+      .status(400)
+      .send(STASHBOT_RESPONSE.STASHBOT_RESPONSE.REQUEST_ERROR());
+    return;
+  }
+
+  try {
+    const resp = await holdItem.holdItem(itemName);
+    response.status(200).send(resp);
+  } catch (err) {
+    response.status(400).send(err.message);
+  }
+}

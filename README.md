@@ -18,6 +18,7 @@ Works best with Visual Studio Code. All NPM scripts [can be run from nav panel w
 # Begin notes
 Start up docker images:
 - docker-compose up -d
+- docker-compose up -d ui
 
 login to pgadmin and connect to db
 - nav to http://localhost:16543/browser/
@@ -49,3 +50,6 @@ docker-compose build service
 fix build issue:
 docker container prune
 
+
+### test server
+http://localhost:8080/stashbot/holditem
