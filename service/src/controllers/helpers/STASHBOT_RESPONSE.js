@@ -43,19 +43,18 @@ const STASHBOT_RESPONSE = {
     return `error adding new bin`;
   },
   HOLD_ERROR() {
-    return `error holding item`
+    return `error holding item`;
   },
   HOLD_SUCCESS() {
-    return `item put on hold successfully`
+    return `item put on hold successfully`;
   },
 
   MOVE_ERROR() {
-    return `error holding item`
+    return `error holding item`;
   },
   MOVE_SUCCESS(itemName, location) {
-    return `${itemName} moved to bin ${location} successfully`
-  }
-
+    return `${itemName} moved to bin ${location} successfully`;
+  },
 };
 
 module.exports.STASHBOT_RESPONSE = STASHBOT_RESPONSE;

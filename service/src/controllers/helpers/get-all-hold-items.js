@@ -10,17 +10,21 @@ quantity: TODO, defaults to 1
 @return: bool of if there was an error, string that alexa should speak
 
 */
-async function holdItem(itemName) {
-  console.log(itemName);
+async function getAllHoldItems() {
   const client = db.connectToDb();
   client.connect();
   try {
     // use parametrized queries instead of string concat (security/sql inj)
-    const queryText = `INSERT INTO on_hold(item_name) VALUES($1) RETURNING *`;
-    const queryValues = [itemName];
-    await client.query(queryText, queryValues);
+    const queryText = `SELECT item_name
+    FROM on_hold
+    ORDER BY date_added DESC;`;
+    const result = await client.query(queryText);
+    console.log('get all items result', result);
+    const itemsOnHold = result.rows.map(row => row.item_name);
+    client.end();
+    return itemsOnHold;
   } catch (error) {
-    console.log('hold item error', error);
+    console.log('get all hold items error', error);
 
     // check if error is bc the item exists already
     // TODO: error message for if bin does not exist
@@ -43,8 +47,6 @@ async function holdItem(itemName) {
       throw new Error(STASHBOT_RESPONSE.STASHBOT_RESPONSE.HOLD_ERROR());
     }
   }
-  client.end();
-  return STASHBOT_RESPONSE.STASHBOT_RESPONSE.HOLD_SUCCESS();
 }
 
-module.exports.holdItem = holdItem;
+module.exports.getAllHoldItems = getAllHoldItems;

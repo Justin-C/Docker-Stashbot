@@ -17,7 +17,7 @@ app.use(
   }),
 );
 
-app.use(cors());   // allows all origins
+app.use(cors()); // allows all origins
 // if ((process.env.NODE_ENV = 'development')) {
 //   app.use(cors());
 // } else {

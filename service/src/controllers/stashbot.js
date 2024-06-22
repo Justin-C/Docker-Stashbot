@@ -5,22 +5,22 @@ const validateItemName = require('./helpers/validators/validate-item-name');
 const validateLocation = require('./helpers/validators/validate-location');
 const removeFromItems = require('./helpers/remove-from-items');
 const holdItem = require('./helpers/hold-item');
-
+const getAllHoldItems = require('./helpers/get-all-hold-items');
 const STASHBOT_RESPONSE = require('./helpers/STASHBOT_RESPONSE');
 const findItems = require('./helpers/find-items');
 
-const errorResponse = (error) => {
-  if (typeof(error) === 'string'){
-    return {error: error}
+const errorResponse = error => {
+  if (typeof error === 'string') {
+    return { error: error };
   }
-  return {error: error.message}
-}
-const successResponse = (response ) => {
-  if(typeof(response) === 'string'){
-  return {response: response}
+  return { error: error.message };
+};
+const successResponse = response => {
+  if (typeof response === 'string') {
+    return { response: response };
   }
-  return response
-}
+  return response;
+};
 exports.addBin = async (request, response) => {
   const { didError, speechResponse } = await addBin.addBin();
 
@@ -124,7 +124,16 @@ exports.holdItem = async (request, response) => {
   } catch (err) {
     response.status(400).send(err.message);
   }
-}
+};
+
+exports.getAllHoldItems = async (request, response) => {
+  try {
+    const resp = await getAllHoldItems.getAllHoldItems();
+    response.status(200).send(resp);
+  } catch (err) {
+    response.status(400).send(err.message);
+  }
+};
 
 exports.moveItem = async (request, response) => {
   // TODO
@@ -144,4 +153,4 @@ exports.moveItem = async (request, response) => {
   } catch (err) {
     response.status(400).send(err.message);
   }
-}
+};

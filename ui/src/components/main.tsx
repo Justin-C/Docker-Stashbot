@@ -1,6 +1,5 @@
 import { Tabs } from '@mantine/core';
 import { useState } from 'react';
-import { AddItemField } from './add-item-field';
 import { FindItemField } from './find-item-field';
 import { AddItemField } from './add-item-field';
 
