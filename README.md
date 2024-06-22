@@ -53,3 +53,5 @@ docker container prune
 
 ### test server
 http://localhost:8080/stashbot/holditem
+
+if not able to access from external device through ip, firewall issue

@@ -16,7 +16,7 @@ services:
     container_name: stashbot_server
     build:
       context: ./service
-      dockerfile: Dockerfile.dev  # on move to prod, update this
+      dockerfile: Dockerfile.dev
     volumes:
       - /app/node_modules
       - ./service/config:/app/config
@@ -25,7 +25,7 @@ services:
     # environment:
     #   DATABASE_URL: postgres://username:root@stashbot-db:5432/api
     ports:
-      - "8080:3000" # port mapping: host:destination
+      - "8080:8080" # port mapping: host:destination
   ui:
     container_name: stashbot_ui
     build:

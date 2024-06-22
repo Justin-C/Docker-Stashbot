@@ -6,7 +6,7 @@ const { response } = require('express');
 require('dotenv').config();
 
 const app = express();
-const port = process.env.port || 3000;
+const port = process.env.port || 8080;
 
 // Apply middlewares
 app.use(morgan('dev')); //  - this will output logging for routes fetched
@@ -17,10 +17,12 @@ app.use(
   }),
 );
 
-// app.use(cors());   // allows all origins
-if ((process.env.NODE_ENV = 'development')) {
-  app.use(cors({ origin: `http://localhost:3000` }));
-}
+app.use(cors());   // allows all origins
+// if ((process.env.NODE_ENV = 'development')) {
+//   app.use(cors());
+// } else {
+//   app.use(cors());
+// }
 
 // Set up routes
 app.get('/', (request, response) => {
