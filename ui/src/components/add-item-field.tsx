@@ -37,7 +37,7 @@ export const AddItemField = () => {
       console.error('Error adding item:', e);
 
       // Handle error response or default to a generic message
-      const errorMessage = e?.error ? e.error : 'Unknown error occurred';
+      const errorMessage = e.error ? e.error : 'Unknown error occurred';
 
       notifications.show({
         color: 'red',

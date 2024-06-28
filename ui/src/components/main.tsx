@@ -13,30 +13,41 @@ export const Main = () => {
   };
 
   return (
-    <div style={{ margin: '30px' }}>
-      <Tabs
-        variant='default'
-        defaultValue='gallery'
-        value={activeTab}
-        onChange={setActiveTab}
+    <div
+      style={{
+        margin: '30px',
+        maxWidth: '500px',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+      }}
+    >
+      <div
+        style={{ margin: '30px' }} // Add margin around Tabs component
       >
-        <Tabs.List justify={'center'}>
-          <Tabs.Tab value='first'>Insert Item</Tabs.Tab>
-          <Tabs.Tab value='second'>Find Item</Tabs.Tab>
-          <Tabs.Tab value='third'>View Bin</Tabs.Tab>
-        </Tabs.List>
+        <Tabs
+          variant='default'
+          defaultValue='gallery'
+          value={activeTab}
+          onChange={setActiveTab}
+        >
+          <Tabs.List justify={'center'}>
+            <Tabs.Tab value='first'>Find Item</Tabs.Tab>
+            <Tabs.Tab value='second'>Insert Item</Tabs.Tab>
+            <Tabs.Tab value='third'>View Bin</Tabs.Tab>
+          </Tabs.List>
 
-        <Tabs.Panel value='first'>
-          <AddItemField />
-        </Tabs.Panel>
-        <Tabs.Panel value='second'>
-          <FindItemField triggerEffectRerun={triggerEffectRerun} />
-        </Tabs.Panel>
-        <Tabs.Panel value='third'>
-          <BinView />
-        </Tabs.Panel>
-      </Tabs>
-      <HoldPanel dependencyKey={dependencyKey} />
+          <Tabs.Panel value='first'>
+            <FindItemField triggerEffectRerun={triggerEffectRerun} />
+          </Tabs.Panel>
+          <Tabs.Panel value='second'>
+            <AddItemField />
+          </Tabs.Panel>
+          <Tabs.Panel value='third'>
+            <BinView />
+          </Tabs.Panel>
+        </Tabs>
+        <HoldPanel dependencyKey={dependencyKey} />
+      </div>
     </div>
   );
 };

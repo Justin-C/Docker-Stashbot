@@ -6,6 +6,7 @@ import {
   TextInput,
   useCombobox,
 } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
 import { useEffect, useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import {
@@ -81,11 +82,21 @@ export const FindItemField = ({ triggerEffectRerun }: FindItemFieldProps) => {
         // Replace with your actual API call for holding an item
         const response = await fetchHoldItem(selectedItem.itemName);
         triggerEffectRerun();
-        console.log('Item held successfully:', response);
+        console.log('Hold Success:', response);
+        notifications.show({
+          title: 'Hold Success',
+          message: response.response,
+        });
         // Handle success (e.g., show notification)
-      } catch (error) {
-        console.error('Error holding item:', error);
-        // Handle error (e.g., show error message)
+      } catch (e: any) {
+        // Handle error response or default to a generic message
+        const errorMessage = e.error ? e.error : 'Unknown error occurred';
+
+        notifications.show({
+          color: 'red',
+          title: 'Error Holding Item',
+          message: errorMessage,
+        });
       }
     }
   };
@@ -96,11 +107,21 @@ export const FindItemField = ({ triggerEffectRerun }: FindItemFieldProps) => {
         // Replace with your actual API call for deleting an item
         const response = await fetchDeleteItem(selectedItem.itemName);
         triggerEffectRerun();
+        notifications.show({
+          title: 'Deleted Success',
+          message: response.response,
+        });
         console.log('Item deleted successfully:', response);
         // Handle success (e.g., show notification)
-      } catch (error) {
-        console.error('Error deleting item:', error);
-        // Handle error (e.g., show error message)
+      } catch (e: any) {
+        // Handle error response or default to a generic message
+        const errorMessage = e.error ? e.error : 'Unknown error occurred';
+
+        notifications.show({
+          color: 'red',
+          title: 'Error Deleting Item',
+          message: errorMessage,
+        });
       }
     }
   };

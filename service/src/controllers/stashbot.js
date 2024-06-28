@@ -26,9 +26,9 @@ exports.addBin = async (request, response) => {
   const { didError, speechResponse } = await addBin.addBin();
 
   if (didError) {
-    response.status(400).send(successResponse(speechResponse));
+    response.status(400).send(errorResponse(speechResponse));
   } else {
-    response.status(200).send(errorResponse(speechResponse));
+    response.status(200).send(successResponse(speechResponse));
   }
 };
 

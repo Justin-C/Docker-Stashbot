@@ -43,10 +43,29 @@ export const HoldPanel = ({ dependencyKey }: HoldPanelProps) => {
     <div>
       <Text size='lg'>Items on Hold</Text>
       {items.map((item, index) => (
-        <Paper key={index} shadow='xs' p='xl'>
-          <Text>{item.itemName}</Text>
-          <Text>Taken from Bin {item.location} temporarily</Text>
-          <Button onClick={() => onSubmit(item.itemName)}>Add Back</Button>
+        <Paper
+          key={index}
+          shadow='xs'
+          p='xs'
+          style={{
+            minWidth: '200px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: '16px',
+          }}
+        >
+          <div style={{ flexGrow: 1 }}>
+            <Text size='lg'>{item.itemName}</Text>
+            <Text size='sm'>Taken from Bin {item.location}</Text>
+          </div>
+          <Button
+            size='compact-sm'
+            onClick={() => onSubmit(item.itemName)}
+            style={{ marginTop: '10px', minWidth: '90px', margin: '10px' }}
+          >
+            Add Back
+          </Button>
         </Paper>
       ))}
     </div>
