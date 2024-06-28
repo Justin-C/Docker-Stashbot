@@ -21,26 +21,30 @@ export const AddItemField = () => {
         return isNaN(binNumber) || binNumber < 1 || binNumber > 99
           ? 'Bin number must be between 1 and 99'
           : null;
-      }
+      },
     },
   });
 
-  const onSubmit = async (values: {itemName: string, itemBin: string}) => {
+  const onSubmit = async (values: { itemName: string; itemBin: string }) => {
     const { itemName, itemBin } = values;
     try {
       const resp = await fetchAddItem(itemName, itemBin.toString());
       notifications.show({
         title: 'Item Added Sucessfully',
         message: resp.response,
-      })
-    } catch(e){
-      console.log(e)
-      notifications.show({
-        title: 'Error Adding Item',
-        message: '',
-      })
-    }
+      });
+    } catch (e: any) {
+    console.error('Error adding item:', e);
 
+    // Handle error response or default to a generic message
+    const errorMessage = e?.error ? e.error : 'Unknown error occurred';
+
+    notifications.show({
+      color:"red",
+      title: 'Error Adding Item',
+      message: errorMessage,
+    });
+    }
   };
 
   return (
@@ -52,6 +56,7 @@ export const AddItemField = () => {
         onSubmit={form.onSubmit(onSubmit)}
       >
         <TextInput
+          style={{ marginTop: '10px' }}
           label='Item Name'
           placeholder='Item'
           {...form.getInputProps('itemName')}
@@ -65,7 +70,9 @@ export const AddItemField = () => {
           max={99}
         />
 
-        <Button type='submit'>Submit</Button>
+        <Button type='submit' style={{ marginTop: '10px' }}>
+          Submit
+        </Button>
       </Box>
     </Fragment>
   );

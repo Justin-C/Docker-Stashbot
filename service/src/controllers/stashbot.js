@@ -8,6 +8,7 @@ const holdItem = require('./helpers/hold-item');
 const getAllHoldItems = require('./helpers/get-all-hold-items');
 const STASHBOT_RESPONSE = require('./helpers/STASHBOT_RESPONSE');
 const findItems = require('./helpers/find-items');
+const removeHold = require('./helpers/remove-hold');
 
 const errorResponse = error => {
   if (typeof error === 'string') {
@@ -46,7 +47,7 @@ exports.addItem = async (request, response) => {
   if (!itemName || !location) {
     response
       .status(400)
-      .send(STASHBOT_RESPONSE.STASHBOT_RESPONSE.REQUEST_ERROR());
+      .send(errorResponse(STASHBOT_RESPONSE.STASHBOT_RESPONSE.REQUEST_ERROR()));
     return;
   }
   try {
@@ -73,7 +74,7 @@ exports.removeItem = async (request, response) => {
   if (!itemName) {
     response
       .status(400)
-      .send(STASHBOT_RESPONSE.STASHBOT_RESPONSE.REQUEST_ERROR());
+      .send(errorResponse(STASHBOT_RESPONSE.STASHBOT_RESPONSE.REQUEST_ERROR()));
     return;
   }
 
@@ -114,24 +115,24 @@ exports.holdItem = async (request, response) => {
   if (!itemName) {
     response
       .status(400)
-      .send(STASHBOT_RESPONSE.STASHBOT_RESPONSE.REQUEST_ERROR());
+      .send(errorResponse(STASHBOT_RESPONSE.STASHBOT_RESPONSE.REQUEST_ERROR()));
     return;
   }
 
   try {
     const resp = await holdItem.holdItem(itemName);
-    response.status(200).send(resp);
+    response.status(200).send(successResponse(resp));
   } catch (err) {
-    response.status(400).send(err.message);
+    response.status(400).send(errorResponse(err.message));
   }
 };
 
 exports.getAllHoldItems = async (request, response) => {
   try {
     const resp = await getAllHoldItems.getAllHoldItems();
-    response.status(200).send(resp);
+    response.status(200).send(successResponse(resp));
   } catch (err) {
-    response.status(400).send(err.message);
+    response.status(400).send(errorResponse(err.message));
   }
 };
 
@@ -143,14 +144,34 @@ exports.moveItem = async (request, response) => {
   if (!itemName) {
     response
       .status(400)
-      .send(STASHBOT_RESPONSE.STASHBOT_RESPONSE.REQUEST_ERROR());
+      .send(errorResponse(STASHBOT_RESPONSE.STASHBOT_RESPONSE.REQUEST_ERROR()));
     return;
   }
 
   try {
     const resp = await holdItem.holdItem(itemName);
-    response.status(200).send(resp);
+    response.status(200).send(successResponse(resp));
   } catch (err) {
-    response.status(400).send(err.message);
+    response.status(400).send(errorResponse(err.message));
+  }
+};
+
+exports.removeHold = async (request, response) => {
+  // TODO
+  const itemName = validateItemName.validateItemName(
+    request?.body?.itemName ?? '',
+  );
+  if (!itemName) {
+    response
+      .status(400)
+      .send(errorResponse(STASHBOT_RESPONSE.STASHBOT_RESPONSE.REQUEST_ERROR()));
+    return;
+  }
+
+  try {
+    const resp = await removeHold.removeHold(itemName);
+    response.status(200).send(successResponse(resp));
+  } catch (err) {
+    response.status(400).send(errorResponse(err.message));
   }
 };

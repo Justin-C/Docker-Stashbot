@@ -29,7 +29,7 @@ async function findItems(itemName) {
     for (const entry of foundRows) {
       responseArray.push({
         itemName: entry.item_name,
-        itemLocation: entry.location,
+        location: entry.location,
       });
     }
   } else {

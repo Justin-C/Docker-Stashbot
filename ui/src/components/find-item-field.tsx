@@ -8,10 +8,18 @@ import {
 } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
-import { fetchFindItems } from './helpers/api/api';
+import {
+  fetchDeleteItem,
+  fetchFindItems,
+  fetchHoldItem,
+} from './helpers/api/api';
 import { Item } from './helpers/api/types';
 
-export const FindItemField = () => {
+type FindItemFieldProps = {
+  triggerEffectRerun: () => void;
+};
+
+export const FindItemField = ({ triggerEffectRerun }: FindItemFieldProps) => {
   const [foundItems, setFoundItems] = useState<Item[]>([]);
   const [comboOptions, setComboOptions] = useState<React.ReactNode[]>([]);
   const [loading, setLoading] = useState(false);
@@ -24,10 +32,14 @@ export const FindItemField = () => {
     setLoading(true);
 
     const fetchItems = async () => {
-      const response = await fetchFindItems(query);
-      if (response && response.foundItems) {
-        setFoundItems(response.foundItems);
-        setLoading(false);
+      try {
+        const response = await fetchFindItems(query);
+        if (response && response.foundItems) {
+          setFoundItems(response.foundItems);
+          setLoading(false);
+        }
+      } catch (e) {
+        setFoundItems([]);
       }
     };
 
@@ -62,6 +74,50 @@ export const FindItemField = () => {
       setSelectedItem(foundItems[searchIndex]);
     }
   }, [value, comboOptions, foundItems]);
+
+  const onSubmitHold = async () => {
+    if (selectedItem) {
+      try {
+        // Replace with your actual API call for holding an item
+        const response = await fetchHoldItem(selectedItem.itemName);
+        triggerEffectRerun();
+        console.log('Item held successfully:', response);
+        // Handle success (e.g., show notification)
+      } catch (error) {
+        console.error('Error holding item:', error);
+        // Handle error (e.g., show error message)
+      }
+    }
+  };
+
+  const onSubmitDelete = async () => {
+    if (selectedItem) {
+      try {
+        // Replace with your actual API call for deleting an item
+        const response = await fetchDeleteItem(selectedItem.itemName);
+        triggerEffectRerun();
+        console.log('Item deleted successfully:', response);
+        // Handle success (e.g., show notification)
+      } catch (error) {
+        console.error('Error deleting item:', error);
+        // Handle error (e.g., show error message)
+      }
+    }
+  };
+
+  const onSubmitMoveTo = async () => {
+    // if (selectedItem) {
+    //   try {
+    //     // Replace with your actual API call for moving an item
+    //     const response = await fetchMoveItem(selectedItem.itemName);
+    //     console.log('Item moved successfully:', response);
+    //     // Handle success (e.g., show notification)
+    //   } catch (error) {
+    //     console.error('Error moving item:', error);
+    //     // Handle error (e.g., show error message)
+    //   }
+    // }
+  };
 
   return (
     <div>
@@ -101,21 +157,33 @@ export const FindItemField = () => {
       </Combobox>
       <label htmlFor=''>
         {selectedItem
-          ? `${selectedItem.itemName} is in Bin: ${selectedItem.itemLocation}`
+          ? `${selectedItem.itemName} is in Bin: ${selectedItem.location}`
           : value.length === 0
           ? 'Nothing found'
           : `${value} not found`}
       </label>
       <br></br>
-      <Button type='submit' color='blue'>
+      <Button
+        style={{ margin: '5px' }}
+        type='button'
+        color='blue'
+        onClick={onSubmitHold}
+        disabled={!Boolean(selectedItem)}
+      >
         Hold
       </Button>
-      <Button type='submit' color='blue'>
+      <Button
+        style={{ margin: '5px' }}
+        type='button'
+        color='blue'
+        onClick={onSubmitDelete}
+        disabled={!Boolean(selectedItem)}
+      >
         Delete
       </Button>
-      <Button type='submit' color='blue'>
+      {/* <Button style={{margin: '5px'}} type='button' color='blue' onClick={onSubmitMoveTo}>
         Move to
-      </Button>
+      </Button> TODO*/}
     </div>
   );
 };

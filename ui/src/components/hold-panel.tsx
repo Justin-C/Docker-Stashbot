@@ -1,33 +1,53 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Text } from '@mantine/core';
-import { fetchGetHolds } from './helpers/api/api';
+import { Button, Paper, Text } from '@mantine/core';
+import { fetchGetHolds, fetchRemoveHold } from './helpers/api/api';
 import { Item } from './helpers/api/types';
 
-export const HoldPanel = () => {
+interface HoldPanelProps {
+  dependencyKey: number; // Define the type for dependencyKey prop
+}
+
+export const HoldPanel = ({ dependencyKey }: HoldPanelProps) => {
   const [items, setItems] = useState<Item[]>([]);
 
+  const onSubmit = async (itemName: string) => {
+    try {
+      const response = await fetchRemoveHold(itemName);
+      console.log('Item submitted successfully:', response);
+
+      // Refetch items on success
+      refreshHoldItems(); // Call the fetchItems function directly
+
+      // Handle success (e.g., update state, show notification)
+    } catch (error) {
+      console.error('Error submitting item:', error);
+      // Handle error as needed (e.g., show error message)
+    }
+  };
+
+  const refreshHoldItems = async () => {
+    try {
+      const data = await fetchGetHolds();
+      setItems(data);
+    } catch (error) {
+      console.error('Error fetching hold items:', error);
+      // Handle error as needed (e.g., set error state)
+    }
+  };
+
   useEffect(() => {
-    const fetchItems = async () => {
-        try {
-          const data = await fetchGetHolds();
-          setItems(data);
-        } catch (error) {
-          console.error('Error fetching hold items:', error);
-          // Handle error as needed (e.g., set error state)
-        }
-      };
-  
-      fetchItems();
-  }, []); // Empty dependency array ensures this effect runs only once on component mount
+    refreshHoldItems();
+  }, [dependencyKey]); // Runs initially and whenever dependencyKey changes
 
   return (
     <div>
-      <h2>Items on Hold</h2>
+      <Text size='lg'>Items on Hold</Text>
       {items.map((item, index) => (
-        <div key={index} style={{ marginBottom: '10px' }}>
-          <Text>{item.itemName} - {item.itemLocation}</Text>
-          <Button>Click Me</Button>
-        </div>
+        <Paper key={index} shadow='xs' p='xl'>
+          <Text>{item.itemName}</Text>
+          <Text>Taken from Bin {item.location} temporarily</Text>
+          <Button onClick={() => onSubmit(item.itemName)}>Add Back</Button>
+        </Paper>
       ))}
     </div>
   );

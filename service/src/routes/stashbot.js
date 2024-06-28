@@ -4,6 +4,7 @@ const {
   addBin,
   addItem,
   removeItem,
+  removeHold,
   findItems,
   holdItem,
   moveItem,
@@ -18,5 +19,6 @@ router.post('/removeitem', removeItem);
 router.post('/finditems', findItems);
 router.post('/holditem', holdItem);
 router.get('/getholds', getAllHoldItems);
+router.post('/removehold', removeHold);
 router.post('/moveitem', moveItem);
 module.exports = router;

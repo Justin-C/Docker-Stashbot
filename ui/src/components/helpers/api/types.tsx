@@ -1,6 +1,6 @@
 export type Item = {
   itemName: string;
-  itemLocation: string;
+  location: string;
 };
 export type FindItemsResponse = {
   foundItems: Item[];
