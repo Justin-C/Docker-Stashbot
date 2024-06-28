@@ -2,6 +2,7 @@ import { Box, Button, NumberInput, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { Fragment } from 'react';
 import { fetchAddItem } from './helpers/api/api';
+import { notifications } from '@mantine/notifications';
 
 export const AddItemField = () => {
   const form = useForm({
@@ -12,8 +13,8 @@ export const AddItemField = () => {
 
     validate: {
       itemName: value =>
-        value.length < 3 || !/^[A-Za-z]+$/.test(value)
-          ? 'Item name must contain at least 3 letters and consist only of letters'
+        value.length < 2 || !/^[A-Za-z]+$/.test(value)
+          ? 'Item name must contain at least 2 letters and consist only of letters'
           : null,
       itemBin: value => {
         const binNumber = Number(value);
@@ -26,7 +27,20 @@ export const AddItemField = () => {
 
   const onSubmit = async (values: {itemName: string, itemBin: string}) => {
     const { itemName, itemBin } = values;
-    await fetchAddItem(itemName, itemBin);
+    try {
+      const resp = await fetchAddItem(itemName, itemBin.toString());
+      notifications.show({
+        title: 'Item Added Sucessfully',
+        message: resp.response,
+      })
+    } catch(e){
+      console.log(e)
+      notifications.show({
+        title: 'Error Adding Item',
+        message: '',
+      })
+    }
+
   };
 
   return (

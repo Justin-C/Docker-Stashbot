@@ -5,3 +5,5 @@ export type Item = {
 export type FindItemsResponse = {
   foundItems: Item[];
 };
+
+export type GetHoldsResponse = Item[];

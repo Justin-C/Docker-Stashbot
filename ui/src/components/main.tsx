@@ -1,12 +1,14 @@
 import { Tabs } from '@mantine/core';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { FindItemField } from './find-item-field';
 import { AddItemField } from './add-item-field';
+import { HoldPanel } from './hold-panel';
 
 export const Main = () => {
   const [activeTab, setActiveTab] = useState<string | null>('first');
 
   return (
+    <Fragment>
     <Tabs
       variant='outline'
       defaultValue='gallery'
@@ -27,5 +29,7 @@ export const Main = () => {
       </Tabs.Panel>
       <Tabs.Panel value='third'>View Bin</Tabs.Panel>
     </Tabs>
+    <HoldPanel />
+    </Fragment>
   );
 };

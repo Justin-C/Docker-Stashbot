@@ -14,15 +14,25 @@ async function getAllHoldItems() {
   const client = db.connectToDb();
   client.connect();
   try {
-    // use parametrized queries instead of string concat (security/sql inj)
-    const queryText = `SELECT item_name
-    FROM on_hold
-    ORDER BY date_added DESC;`;
-    const result = await client.query(queryText);
-    console.log('get all items result', result);
-    const itemsOnHold = result.rows.map(row => row.item_name);
-    client.end();
-    return itemsOnHold;
+    const queryText = `
+    SELECT oh.item_name, i.location
+    FROM on_hold oh
+    JOIN items i ON oh.item_name = i.item_name
+    ORDER BY oh.date_added DESC;
+  `;
+  
+  const result = await client.query(queryText);
+  console.log('get all items result', result);
+  
+  // Map rows to objects with itemName and location
+  const itemsOnHold = result.rows.map(row => ({
+    itemName: row.item_name,
+    location: row.location
+  }));
+  
+  client.end(); // Assuming you are closing the client connection here
+  
+  return itemsOnHold;
   } catch (error) {
     console.log('get all hold items error', error);
 
