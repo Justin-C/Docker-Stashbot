@@ -34,16 +34,16 @@ export const AddItemField = () => {
         message: resp.response,
       });
     } catch (e: any) {
-    console.error('Error adding item:', e);
+      console.error('Error adding item:', e);
 
-    // Handle error response or default to a generic message
-    const errorMessage = e?.error ? e.error : 'Unknown error occurred';
+      // Handle error response or default to a generic message
+      const errorMessage = e?.error ? e.error : 'Unknown error occurred';
 
-    notifications.show({
-      color:"red",
-      title: 'Error Adding Item',
-      message: errorMessage,
-    });
+      notifications.show({
+        color: 'red',
+        title: 'Error Adding Item',
+        message: errorMessage,
+      });
     }
   };
 

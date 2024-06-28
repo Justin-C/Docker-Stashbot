@@ -25,7 +25,7 @@ export async function fetchApi(url: string, options: RequestOptions = {}) {
     parsedResponse = await response.json();
   } else {
     const parsedText = await response.text();
-    parsedResponse = { error: parsedText } // If not JSON, parse as text
+    parsedResponse = { error: parsedText }; // If not JSON, parse as text
   }
   if (!response.ok) {
     throw parsedResponse;
