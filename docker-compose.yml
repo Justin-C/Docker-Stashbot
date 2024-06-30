@@ -10,8 +10,9 @@ services:
       - POSTGRES_DB=root
       - POSTGRES_PASSWORD=pass
     volumes:
-      - ./postgresql/data:/var/lib/postgresql # maps host to data directory inside cont
+      - postgres_data:/var/lib/postgresql/data
       - ./docker_postgres_init.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
+      - ./data.csv:/docker-entrypoint-initdb.d/data.csv  # Mount your CSV file here (optional, if need to prepopulate)
   service:
     container_name: stashbot_server
     build:
@@ -22,8 +23,6 @@ services:
       - ./service/config:/app/config
       - ./service/src:/app/src
       - ./service/test:/app/test
-    # environment:
-    #   DATABASE_URL: postgres://username:root@stashbot-db:5432/api
     ports:
       - "8080:8080" # port mapping: host:destination
   ui:
@@ -48,3 +47,6 @@ services:
       - "16543:80"
     depends_on:
       - postgres
+volumes:
+  postgres_data:
+    driver: local

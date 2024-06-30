@@ -4,7 +4,7 @@ CREATE DATABASE api;
 
 GRANT ALL PRIVILEGES ON DATABASE api TO me;
 
-CREATE TABLE bins (
+CREATE TABLE bins ( -- bug: serialize id not using latest after prepopulate
    id SERIAL PRIMARY KEY,
    is_full BOOL DEFAULT false
 );
@@ -37,3 +37,41 @@ CREATE TABLE on_hold (
    date_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
    FOREIGN KEY(item_name) REFERENCES items(item_name) ON DELETE CASCADE
 );
+
+
+CREATE TEMP TABLE temp_items (
+    item_name VARCHAR(50),
+    location INT,
+    quantity INT
+);
+
+-- Load data from CSV into temporary table
+COPY temp_items(item_name, location, quantity)
+FROM '/docker-entrypoint-initdb.d/data.csv' DELIMITER ',' CSV HEADER;
+
+-- populate bins then populate items from data.csv
+DO $$
+DECLARE
+    max_location INTEGER;
+    i INTEGER;
+BEGIN
+    -- Find the maximum location value from data.csv
+    SELECT MAX(location) INTO max_location FROM temp_items;
+    
+    -- If max_location is NULL, set a default value
+    IF max_location IS NULL THEN
+        max_location := 0; -- or set to any default value you prefer
+    END IF;
+
+    -- Insert bins into the bins table up to max_location
+    FOR i IN 1..max_location LOOP
+        INSERT INTO bins (id, is_full) VALUES (i, false);
+    END LOOP;
+END $$;
+
+-- Drop the temporary table
+DROP TABLE temp_items;
+
+-- Load data from CSV file into the items table
+COPY items(item_name, location, quantity)
+FROM '/docker-entrypoint-initdb.d/data.csv' DELIMITER ',' CSV HEADER;
