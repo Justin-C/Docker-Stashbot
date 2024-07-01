@@ -13,8 +13,8 @@ export const AddItemField = () => {
 
     validate: {
       itemName: value =>
-        value.length < 2 || !/^[A-Za-z]+$/.test(value)
-          ? 'Item name must contain at least 2 letters and consist only of letters'
+        value.length < 2 || /\s{2,}|^\s+|\s+$/.test(value)
+        ? 'Item name must contain at least 2 characters and not have extra spaces'
           : null,
       itemBin: value => {
         const binNumber = Number(value);
